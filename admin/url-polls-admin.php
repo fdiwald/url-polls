@@ -51,7 +51,6 @@ class Url_Polls_Admin {
 
 		$this->url_polls = $url_polls;
 		$this->version = $version;
-
 	}
 
 	/**
@@ -100,4 +99,19 @@ class Url_Polls_Admin {
 
 	}
 
+	/**
+	 * Adds the menu pages to the admin menu.
+	 * @since	1.0.0
+	 */
+	public function setup_menu()
+	{
+		$pollsController = new Url_Polls\Admin\Polls\Polls_Controller();
+		add_menu_page(__('URL Polls page title'),
+						__('URL Polls'),
+						'manage_options',
+						'url-polls',
+						array($pollsController, 'render_options_page'),
+						plugin_dir_url( __FILE__ ) . 'icon.png'
+					);
+	}
 }

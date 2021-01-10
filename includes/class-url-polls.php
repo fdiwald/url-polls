@@ -44,9 +44,9 @@ class Url_Polls {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $url_polls    The string used to uniquely identify this plugin.
+	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
 	 */
-	protected $url_polls;
+	protected $plugin_name;
 
 	/**
 	 * The current version of the plugin.
@@ -72,7 +72,7 @@ class Url_Polls {
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->url_polls = 'url-polls';
+		$this->plugin_name = 'url-polls';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -114,13 +114,21 @@ class Url_Polls {
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-url-polls-admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/url-polls-admin.php';
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/mvc/base-model.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/mvc/base-view.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/mvc/base-controller.php';
+		
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/polls/polls-model.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/polls/polls-view.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/polls/polls-controller.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-url-polls-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/url-polls-public.php';
 
 		$this->loader = new Url_Polls_Loader();
 
@@ -152,10 +160,11 @@ class Url_Polls {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Url_Polls_Admin( $this->get_url_polls(), $this->get_version() );
+		$plugin_admin = new Url_Polls_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'setup_menu' );
 
 	}
 
@@ -168,7 +177,7 @@ class Url_Polls {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Url_Polls_Public( $this->get_url_polls(), $this->get_version() );
+		$plugin_public = new Url_Polls_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
@@ -191,8 +200,8 @@ class Url_Polls {
 	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
 	 */
-	public function get_url_polls() {
-		return $this->url_polls;
+	public function get_plugin_name() {
+		return $this->plugin_name;
 	}
 
 	/**
