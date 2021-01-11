@@ -7,10 +7,11 @@ namespace Url_Polls\Admin\Polls;
 final class Polls_Controller extends \Url_Polls\Admin\MVC\Base_Controller
 {
 	protected function get_model_instance() {return new Polls_Model();}
-	protected function get_view_instance() {return new Polls_View();}
 
 	public function render_options_page()
 	{
-		$this->get_view()->render("");
+		if (!current_user_can('manage_options')) return;
+		
+		require plugin_dir_path(__FILE__) . 'polls-view.php';
 	}
 }

@@ -76,9 +76,15 @@ class Url_Polls {
 
 		$this->load_dependencies();
 		$this->set_locale();
-		$this->define_admin_hooks();
-		$this->define_public_hooks();
 
+		if(is_admin())
+		{
+			$this->define_admin_hooks();
+		}
+		else
+		{
+			$this->define_public_hooks();
+		}
 	}
 
 	/**
@@ -111,27 +117,43 @@ class Url_Polls {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-url-polls-i18n.php';
 
+		if(is_admin()) 
+			$this->load_admin_dependencies();
+		else
+			$this->load_public_dependencies();
+
+		$this->loader = new Url_Polls_Loader();
+	}
+
+	/**
+	 * Loads dependencies for admin pages
+	 * @since	1.0.0
+	 */
+	private function load_public_dependencies()
+	{
+		/**
+		 * The class responsible for defining all actions that occur in the public-facing
+		 * side of the site.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/url-polls-public.php';
+	}
+
+	/**
+	 * Loads dependencies for admin pages
+	 * @since	1.0.0
+	 */
+	private function load_admin_dependencies()
+	{
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/url-polls-admin.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/mvc/base-model.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/mvc/base-view.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/mvc/base-controller.php';
 		
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/polls/polls-model.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/polls/polls-view.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/polls/polls-controller.php';
-
-		/**
-		 * The class responsible for defining all actions that occur in the public-facing
-		 * side of the site.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/url-polls-public.php';
-
-		$this->loader = new Url_Polls_Loader();
-
 	}
 
 	/**
@@ -165,6 +187,7 @@ class Url_Polls {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'setup_menu' );
+		$this->loader->add_action( 'init', $plugin_admin, 'register_post_types' );
 
 	}
 
