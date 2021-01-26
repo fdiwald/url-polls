@@ -25,7 +25,26 @@
  * @package    Url_Polls
  */
 
+
 // If uninstall not called from WordPress, then exit.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
+
+// require_once(get_home_path() . "wp-config.php");
+// require_once(get_home_path() . "wp-includes/wp-db.php");
+require_once(plugin_dir_path(__FILE__) . "includes/constants.php");
+
+use const Url_Polls\SETTING_DEFAULT_RECIPIENTS;
+use const Url_Polls\META_RECIPIENTS;
+use const Url_Polls\POST_TYPE_POLL;
+
+global $wpdb;
+
+delete_option(SETTING_DEFAULT_RECIPIENTS);
+
+$delete_meta = "DELETE wp_postmeta WHERE meta_key='" . META_RECIPIENTS . "'";
+$results = $wpdb->query($delete_polls);
+
+$delete_polls = "DELETE wp_posts WHERE post_type='" . POST_TYPE_POLL . "'";
+$results = $wpdb->query($delete_polls);

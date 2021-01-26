@@ -30,7 +30,8 @@ class Url_Polls_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-
+		Url_Polls::register_post_types();
+		flush_rewrite_rules();
 	}
 
 }

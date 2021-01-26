@@ -1,4 +1,13 @@
 <?php
+namespace Url_Polls\Admin;
+use Url_Polls\Admin\Polls\Polls_Controller;
+use const Url_Polls\LANG_DOMAIN;
+use const Url_Polls\MENU_SETTINGS;
+use const Url_Polls\PLUGIN_NAME;
+use const Url_Polls\POST_TYPE_POLL;
+use const Url_Polls\SETTING_DEFAULT_RECIPIENTS;
+use const Url_Polls\SETTINGS_SECTION_GENERAL;
+use const Url_Polls\VERSION;
 
 /**
  * The admin-specific functionality of the plugin.
@@ -21,24 +30,11 @@
  * @author     Your Name <email@example.com>
  */
 class Url_Polls_Admin {
-
 	/**
-	 * The ID of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $url_polls    The ID of this plugin.
+	 * The controller for the polls menu entry
+	 * @since	1.0.0
 	 */
-	private $url_polls;
-
-	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
-	 */
-	private $version;
+	var Polls_Controller $polls_controller;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -47,10 +43,19 @@ class Url_Polls_Admin {
 	 * @param      string    $url_polls       The name of this plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $url_polls, $version ) {
+	public function __construct(\Url_Polls_Loader $loader)
+	{
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/polls/polls-controller.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/polls/polls-view.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/polls/recipients-list.php';
+		
+		$this->pollsController = new Polls\Polls_Controller();
 
-		$this->url_polls = $url_polls;
-		$this->version = $version;
+		$loader->add_action('admin_enqueue_scripts', $this, 'enqueue_styles');
+		$loader->add_action('admin_enqueue_scripts', $this, 'enqueue_scripts');
+		$loader->add_action('admin_menu', $this, 'setup_menu');
+		$loader->add_action('admin_init', $this, 'setup_settings');
+		$loader->add_action('add_meta_boxes', $this, 'add_meta_boxes');
 	}
 
 	/**
@@ -58,8 +63,8 @@ class Url_Polls_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
-
+	public function enqueue_styles()
+	{
 		/**
 		 * This function is provided for demonstration purposes only.
 		 *
@@ -72,8 +77,7 @@ class Url_Polls_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->url_polls, plugin_dir_url( __FILE__ ) . 'css/url-polls-admin.css', array(), $this->version, 'all' );
-
+		wp_enqueue_style(PLUGIN_NAME, plugin_dir_url( __FILE__ ) . 'css/url-polls-admin.css', array(), VERSION, 'all' );
 	}
 
 	/**
@@ -81,8 +85,8 @@ class Url_Polls_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
-
+	public function enqueue_scripts()
+	{
 		/**
 		 * This function is provided for demonstration purposes only.
 		 *
@@ -95,8 +99,7 @@ class Url_Polls_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->url_polls, plugin_dir_url( __FILE__ ) . 'js/url-polls-admin.js', array( 'jquery' ), $this->version, false );
-
+		wp_enqueue_script(PLUGIN_NAME, plugin_dir_url( __FILE__ ) . 'js/url-polls-admin.js', array( 'jquery' ), VERSION, false );
 	}
 
 	/**
@@ -105,52 +108,69 @@ class Url_Polls_Admin {
 	 */
 	public function setup_menu()
 	{
-		$pollsController = new Url_Polls\Admin\Polls\Polls_Controller();
-		add_menu_page(__('URL Polls page title'),
-						__('URL Polls'),
-						'manage_options',
-						'url-polls',
-						array($pollsController, 'render_options_page'),
-						plugin_dir_url( __DIR__ ) . 'icon.png'
-					);
+		add_submenu_page(
+			'edit.php?post_type='.POST_TYPE_POLL,
+			__('URL Polls page title', LANG_DOMAIN),
+			__('Settings', LANG_DOMAIN),
+			'manage_options',
+			MENU_SETTINGS,
+			array($this, 'render_settings_page')
+		);
 	}
 
 	/**
-	 * Registers the required post_types.
+	 * Registers settings for the plugin
 	 * @since	1.0.0
 	 */
-	public function register_post_types()
+	public function setup_settings()
 	{
-		register_post_type('url-polls_poll',
-							array(
-								'label' => __('URL Polls'),
-								'labels' => array(
-									'name' => __('URL Polls'),
-									'singular_name' => __('URL Poll'),
-									'add_new' => __('Add Poll'),
-									'edit_item' => __('Edit Poll'),
-									'new_item' => __('New Poll'),
-									'view_item' => __('View Poll'),
-									'view_items' => __('View Polls'),
-									'search_items' => __('Search Polls'),
-									'not_found' => __('No Polls found'),
-									'not_found_in_trash' => __('No Polls found in trash'),
-									'all_items' => __('All Polls'),
-									'insert_into_item' => __('Insert into Poll'),
-									'filter_items_list' => __('Filter Polls list'),
-									'item_published' => __('Poll published.'),
-									'item_reverted_to_draft' => __('Poll reverted to draft.'),
-									'item_updated' => __('Poll updated.')
-								),
-								'description' => 'A poll awaiting feedback by URLs',
-								'public' => true,
-								'exclude_from_search' => true,
-								'publicly_queryable' => false,
-								'show_in_menu' => true,
-								'show_in_nav_menus' => false,
-								'menu_icon' => plugin_dir_url( __DIR__ ) . 'icon.png',
-								'supports' => array('title')
-							)
-						);
+		register_setting(SETTINGS_SECTION_GENERAL, SETTING_DEFAULT_RECIPIENTS, [
+			'type' => 'string',
+			'description' => __('A list of person\'s names separated by line breaks which are added as recipients to new polls.', LANG_DOMAIN),
+			'sanitize_callback' => 'sanitize_textarea_field',
+			'show_in_rest' => false,
+			'default' => '']
+		);
+		add_settings_section(
+			SETTINGS_SECTION_GENERAL,
+			__('URL Polls General settings', LANG_DOMAIN),
+			'',
+			MENU_SETTINGS
+		);
+		add_settings_field(
+			SETTING_DEFAULT_RECIPIENTS,
+			__('Default recipients', LANG_DOMAIN),
+			[$this, 'render_default_recipient_setting'],
+			MENU_SETTINGS,
+			SETTINGS_SECTION_GENERAL
+		);
+	}
+
+	/**
+	 * Renders the settings page.
+	 * @since	1.0.0
+	 */
+	public function render_settings_page()
+	{
+		echo '<form action="options.php" method="post">';
+		settings_fields(SETTINGS_SECTION_GENERAL);
+		do_settings_sections(MENU_SETTINGS);
+		submit_button(__('Submit', LANG_DOMAIN));
+		echo '</form>';
+	}
+	public function render_default_recipient_setting($args)
+	{
+		$default_recipients = get_option(SETTING_DEFAULT_RECIPIENTS);
+		echo '<textarea id="'.SETTING_DEFAULT_RECIPIENTS.'" name="'.SETTING_DEFAULT_RECIPIENTS."\" rows=\"20\" cols=\"40\">$default_recipients</textarea>";
+	}
+
+	/**
+	 * Registers the metaboxes
+	 */
+	public function add_meta_boxes()
+	{
+		add_meta_box('url-polls_poll_recipients_metabox',
+		__('Recipients', LANG_DOMAIN),
+		array($this->pollsController, 'render_recipients_metabox'));
 	}
 }

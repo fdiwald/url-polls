@@ -13,6 +13,9 @@
  * @subpackage Url_Polls/includes
  */
 
+use const Url_Polls\LANG_DOMAIN;
+use const Url_Polls\POST_TYPE_POLL;
+
 /**
  * The core plugin class.
  *
@@ -27,6 +30,7 @@
  * @subpackage Url_Polls/includes
  * @author     Your Name <email@example.com>
  */
+
 class Url_Polls {
 
 	/**
@@ -40,24 +44,6 @@ class Url_Polls {
 	protected $loader;
 
 	/**
-	 * The unique identifier of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
-	 */
-	protected $plugin_name;
-
-	/**
-	 * The current version of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      string    $version    The current version of the plugin.
-	 */
-	protected $version;
-
-	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -67,24 +53,19 @@ class Url_Polls {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		if ( defined( 'URL_POLLS_VERSION' ) ) {
-			$this->version = URL_POLLS_VERSION;
-		} else {
-			$this->version = '1.0.0';
-		}
-		$this->plugin_name = 'url-polls';
-
 		$this->load_dependencies();
 		$this->set_locale();
 
 		if(is_admin())
 		{
-			$this->define_admin_hooks();
+			// The admin controller registers the required hooks itself.
+			new \Url_Polls\Admin\Url_Polls_Admin($this->loader);
 		}
 		else
 		{
 			$this->define_public_hooks();
 		}
+		$this->define_hooks();
 	}
 
 	/**
@@ -117,6 +98,8 @@ class Url_Polls {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-url-polls-i18n.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/polls-model.php';
+
 		if(is_admin()) 
 			$this->load_admin_dependencies();
 		else
@@ -148,12 +131,6 @@ class Url_Polls {
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/url-polls-admin.php';
-
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/mvc/base-model.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/mvc/base-controller.php';
-		
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/polls/polls-model.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/polls/polls-controller.php';
 	}
 
 	/**
@@ -165,30 +142,11 @@ class Url_Polls {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function set_locale() {
-
+	private function set_locale()
+	{
 		$plugin_i18n = new Url_Polls_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
-	}
-
-	/**
-	 * Register all of the hooks related to the admin area functionality
-	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function define_admin_hooks() {
-
-		$plugin_admin = new Url_Polls_Admin( $this->get_plugin_name(), $this->get_version() );
-
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-		$this->loader->add_action( 'admin_menu', $plugin_admin, 'setup_menu' );
-		$this->loader->add_action( 'init', $plugin_admin, 'register_post_types' );
-
 	}
 
 	/**
@@ -198,13 +156,21 @@ class Url_Polls {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_public_hooks() {
-
-		$plugin_public = new Url_Polls_Public( $this->get_plugin_name(), $this->get_version() );
+	private function define_public_hooks()
+	{
+		$plugin_public = new Url_Polls_Public();
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+	}
 
+	/**
+	 * Register all of the hooks needed in admin and public
+	 * @since	1.0.0
+	 */
+	private function define_hooks()
+	{
+		$this->loader->add_action('init', $this, 'register_post_types');
 	}
 
 	/**
@@ -212,19 +178,9 @@ class Url_Polls {
 	 *
 	 * @since    1.0.0
 	 */
-	public function run() {
+	public function run()
+	{
 		$this->loader->run();
-	}
-
-	/**
-	 * The name of the plugin used to uniquely identify it within the context of
-	 * WordPress and to define internationalization functionality.
-	 *
-	 * @since     1.0.0
-	 * @return    string    The name of the plugin.
-	 */
-	public function get_plugin_name() {
-		return $this->plugin_name;
 	}
 
 	/**
@@ -233,18 +189,50 @@ class Url_Polls {
 	 * @since     1.0.0
 	 * @return    Url_Polls_Loader    Orchestrates the hooks of the plugin.
 	 */
-	public function get_loader() {
+	public function get_loader()
+	{
 		return $this->loader;
 	}
 
 	/**
-	 * Retrieve the version number of the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    string    The version number of the plugin.
+	 * Registers the required post_types.
+	 * @since	1.0.0
 	 */
-	public function get_version() {
-		return $this->version;
+	public static function register_post_types()
+	{
+		register_post_type(
+			POST_TYPE_POLL,
+			array(
+				'labels' => array(
+					'name' => __('URL Polls', LANG_DOMAIN),
+					'singular_name' => __('URL Poll', LANG_DOMAIN),
+					'add_new' => __('Add Poll', LANG_DOMAIN),
+					'edit_item' => __('Edit Poll', LANG_DOMAIN),
+					'new_item' => __('New Poll', LANG_DOMAIN),
+					'view_item' => __('View Poll', LANG_DOMAIN),
+					'view_items' => __('View Polls', LANG_DOMAIN),
+					'search_items' => __('Search Polls'), LANG_DOMAIN,
+					'not_found' => __('No Polls found', LANG_DOMAIN),
+					'not_found_in_trash' => __('No Polls found in trash', LANG_DOMAIN),
+					'all_items' => __('All Polls', LANG_DOMAIN),
+					'insert_into_item' => __('Insert into Poll', LANG_DOMAIN),
+					'filter_items_list' => __('Filter Polls list', LANG_DOMAIN),
+					'item_published' => __('Poll published.', LANG_DOMAIN),
+					'item_reverted_to_draft' => __('Poll reverted to draft.', LANG_DOMAIN),
+					'item_updated' => __('Poll updated.', LANG_DOMAIN)
+				),
+				'description' => __('A poll awaiting feedback by URLs', LANG_DOMAIN),
+				'public' => true,
+				'exclude_from_search' => true,
+				'publicly_queryable' => true,
+				'show_in_menu' => true,
+				'show_in_nav_menus' => false,
+				'menu_icon' => plugin_dir_url( __DIR__ ) . 'admin/icon.png',
+				'supports' => array('title'),
+				'has_archive' => true,
+				'rewrite' => false
+			)
+		);
 	}
-
 }
+

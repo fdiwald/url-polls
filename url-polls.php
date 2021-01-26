@@ -42,6 +42,7 @@ define( 'URL_POLLS_VERSION', '1.0.0' );
  */
 function activate_url_polls() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-url-polls-activator.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/constants.php';
 	Url_Polls_Activator::activate();
 }
 
@@ -51,11 +52,22 @@ function activate_url_polls() {
  */
 function deactivate_url_polls() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-url-polls-deactivator.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/constants.php';
 	Url_Polls_Deactivator::deactivate();
 }
 
 register_activation_hook( __FILE__, 'activate_url_polls' );
 register_deactivation_hook( __FILE__, 'deactivate_url_polls' );
+
+/**
+ * The plugin wide constants
+ */
+require plugin_dir_path( __FILE__ ) . 'includes/constants.php';
+
+/**
+ * Plugin wide helper functions
+ */
+require_once plugin_dir_path(__FILE__) . 'includes/helper-functions.php';
 
 /**
  * The core plugin class that is used to define internationalization,
