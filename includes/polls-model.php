@@ -15,12 +15,16 @@ class Polls_Model
 	 */
 	public static function get_recipients_data($post_ID, $per_page = 5, $page_number = 1)
 	{
-		// $data = get_post_meta($post_ID, META_RECIPIENTS, true);
-		// return get_post_meta($post_ID, META_RECIPIENTS, true);
-		$data = get_post_meta($post_ID, META_RECIPIENTS)[0];
-		$data = json_decode($data, true);
-		// Convert from Array of Objects to Array of associative Arrays
-		//,,,,$data = array_map(function($element) {return (array)$element;}, $data);
+		$data = get_post_meta($post_ID, META_RECIPIENTS);
+		if($data != null)
+		{
+			$data = $data[0];
+			$data = json_decode($data, true);
+		}
+		else
+		{
+			$data = [];
+		}
 
 		return $data;
 	}
@@ -31,7 +35,12 @@ class Polls_Model
 	 */
 	public static function get_recipients_data_decorated($post_ID, $per_page = 5, $page_number = 1)
 	{
-		return self::decorate_recipients_data(self::get_recipients_data($post_ID, $per_page, $page_number));
+		$recipients_data = self::get_recipients_data($post_ID, $per_page, $page_number);
+		if($recipients_data != null)
+		{
+			$recipients_data = self::decorate_recipients_data($recipients_data);
+		}
+		return $recipients_data;
 	}
 
 

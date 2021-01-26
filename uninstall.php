@@ -31,8 +31,6 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-// require_once(get_home_path() . "wp-config.php");
-// require_once(get_home_path() . "wp-includes/wp-db.php");
 require_once(plugin_dir_path(__FILE__) . "includes/constants.php");
 
 use const Url_Polls\SETTING_DEFAULT_RECIPIENTS;
@@ -43,8 +41,8 @@ global $wpdb;
 
 delete_option(SETTING_DEFAULT_RECIPIENTS);
 
-$delete_meta = "DELETE wp_postmeta WHERE meta_key='" . META_RECIPIENTS . "'";
+$delete_meta = "DELETE FROM wp_postmeta WHERE meta_key='" . META_RECIPIENTS . "'";
 $results = $wpdb->query($delete_polls);
 
-$delete_polls = "DELETE wp_posts WHERE post_type='" . POST_TYPE_POLL . "'";
+$delete_polls = "DELETE FROM wp_posts WHERE post_type='" . POST_TYPE_POLL . "'";
 $results = $wpdb->query($delete_polls);
