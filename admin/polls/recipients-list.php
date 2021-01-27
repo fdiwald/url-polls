@@ -133,7 +133,7 @@ class Recipients_List extends WP_List_Table
 	{
 		$this->_column_headers = $this->get_column_info();
 	
-		$per_page = $this->get_items_per_page('recipients_per_page', 5);
+		$per_page = $this->get_items_per_page('recipients_per_page', 0);
 		$page_number = $this->get_pagenum();
 		$total_items = count($this->items);
 	
