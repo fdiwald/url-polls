@@ -1,0 +1,204 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: url-polls\n"
+"POT-Creation-Date: 2021-01-27 18:40+0100\n"
+"PO-Revision-Date: 2021-01-27 20:15+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de_AT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.2\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: admin/polls/polls-view.php:20
+msgid "Add default recipients"
+msgstr "Standard-Empfänger hinzufügen"
+
+#: admin/polls/polls-view.php:23
+msgid "Export"
+msgstr "Export"
+
+#: admin/polls/recipients-list.php:22
+msgid "Recipient"
+msgstr "Empfänger"
+
+#: admin/polls/recipients-list.php:23 admin/url-polls-admin.php:173
+msgid "Recipients"
+msgstr "Empfänger"
+
+#: admin/polls/recipients-list.php:31
+msgid "No recipients avaliable."
+msgstr "Keine Empfänger erfasst."
+
+#: admin/polls/recipients-list.php:41 includes/polls-model.php:57
+msgid "Name"
+msgstr "Name"
+
+#: admin/polls/recipients-list.php:42
+msgid "Answer"
+msgstr "Antwort"
+
+#: admin/polls/recipients-list.php:43
+msgid "ID"
+msgstr "ID"
+
+#: admin/polls/recipients-list.php:123
+msgid "Delete"
+msgstr "Löschen"
+
+#: admin/polls/recipients-list.php:124
+msgid "Accept"
+msgstr "Zusagen"
+
+#: admin/polls/recipients-list.php:125
+msgid "Reject"
+msgstr "Ablehnen"
+
+#: admin/polls/recipients-list.php:200
+msgid "Select bulk action"
+msgstr "Mehrfachaktion auswählen"
+
+#: admin/polls/recipients-list.php:202
+msgid "Bulk actions"
+msgstr "Mehrfachaktionen"
+
+#: admin/polls/recipients-list.php:223
+msgid "Apply"
+msgstr "Anwenden"
+
+#: admin/url-polls-admin.php:113
+msgid "URL Polls page title"
+msgstr "URL Polls Seitentitel"
+
+#: admin/url-polls-admin.php:114
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: admin/url-polls-admin.php:129
+msgid ""
+"A list of person's names separated by line breaks which are added as "
+"recipients to new polls."
+msgstr ""
+"Eine Liste von Personnennamen getrennt durch Zeilenumbrüche, die als "
+"Empfänger zu neuen Umfragen hinzugefügt werden."
+
+#: admin/url-polls-admin.php:136
+msgid "URL Polls General settings"
+msgstr "URL Polls Allgemeine Einstellungen"
+
+#: admin/url-polls-admin.php:142
+msgid "Default recipients"
+msgstr "Standard-Empfänger"
+
+#: admin/url-polls-admin.php:158
+msgid "Submit"
+msgstr "Änderungen Speichern"
+
+#: includes/class-url-polls.php:207
+msgid "URL Polls"
+msgstr "URL Polls"
+
+#: includes/class-url-polls.php:208
+msgid "URL Poll"
+msgstr "URL Poll"
+
+#: includes/class-url-polls.php:209
+msgid "Add Poll"
+msgstr "Umfrage erstellen"
+
+#: includes/class-url-polls.php:210
+msgid "Edit Poll"
+msgstr "Umfrage bearbeiten"
+
+#: includes/class-url-polls.php:211
+msgid "New Poll"
+msgstr "Neue Umfrage"
+
+#: includes/class-url-polls.php:212
+msgid "View Poll"
+msgstr "Umfrage anzeigen"
+
+#: includes/class-url-polls.php:213
+msgid "View Polls"
+msgstr "Umfragen anzeigen"
+
+#: includes/class-url-polls.php:214
+msgid "Search Polls"
+msgstr "Umfragen suchen"
+
+#: includes/class-url-polls.php:215
+msgid "No Polls found"
+msgstr "Keine Umfrage gefunden"
+
+#: includes/class-url-polls.php:216
+msgid "No Polls found in trash"
+msgstr "Keine Umfragen im Papierkorb gefunden"
+
+#: includes/class-url-polls.php:217
+msgid "All Polls"
+msgstr "Alle Umfragen"
+
+#: includes/class-url-polls.php:218
+msgid "Insert into Poll"
+msgstr "In Umfrage einfügen"
+
+#: includes/class-url-polls.php:219
+msgid "Filter Polls list"
+msgstr "Umfragenliste filtern"
+
+#: includes/class-url-polls.php:220
+msgid "Poll published."
+msgstr "Umfrage veröffentlicht."
+
+#: includes/class-url-polls.php:221
+msgid "Poll reverted to draft."
+msgstr "Umfrage auf Entwurf umgestellt."
+
+#: includes/class-url-polls.php:222
+msgid "Poll updated."
+msgstr "Umfrage aktualisiert."
+
+#: includes/class-url-polls.php:224
+msgid "A poll awaiting feedback by URLs"
+msgstr "Eine Umfrage, die per URLs beantwortet werden kann"
+
+#: includes/polls-model.php:58
+msgid "Status"
+msgstr "Status"
+
+#: includes/polls-model.php:59
+msgid "Accept-URL"
+msgstr "Zusage-URL"
+
+#: includes/polls-model.php:60
+msgid "Reject-URL"
+msgstr "Absage-URL"
+
+#: includes/polls-model.php:88
+msgid "accepted"
+msgstr "zugesagt"
+
+#: includes/polls-model.php:91
+msgid "rejected"
+msgstr "abgelehnt"
+
+#: includes/polls-model.php:94
+msgid "unanswered"
+msgstr "unbeantwortet"
+
+#: public/url-polls-public.php:110
+msgid "You successfully accepted the date suggestion."
+msgstr "Du hast den Termin erfolgreich zugesagt."
+
+#: public/url-polls-public.php:114
+msgid "You successfully rejected the date suggestion."
+msgstr "Du hast den Termin erfolgreich abgelehnt."
+
+#: public/url-polls-public.php:118
+msgid "There has been an error saving your answer."
+msgstr "Beim Speichern deiner Antwort ist ein Fehler aufgetreten."
