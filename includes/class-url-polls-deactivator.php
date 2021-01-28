@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Fired during plugin deactivation
  *
@@ -9,6 +8,11 @@
  * @package    Url_Polls
  * @subpackage Url_Polls/includes
  */
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 use const Url_Polls\POST_TYPE_POLL;
 

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Define the internationalization functionality
  *
@@ -12,6 +11,11 @@
  * @package    Url_Polls
  * @subpackage Url_Polls/includes
  */
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 /**
  * Define the internationalization functionality.

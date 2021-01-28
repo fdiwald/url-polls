@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Register all actions and filters for the plugin
  *
@@ -9,6 +8,11 @@
  * @package    Url_Polls
  * @subpackage Url_Polls/includes
  */
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 /**
  * Register all actions and filters for the plugin.

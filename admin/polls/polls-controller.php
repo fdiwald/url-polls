@@ -1,6 +1,11 @@
 <?php
 namespace Url_Polls\Admin\Polls;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 use Url_Polls\Polls_Model;
 
 use function Url_Polls\sanitize_base64;
@@ -51,9 +56,44 @@ final class Polls_Controller
 	public function render_recipients_metabox($post)
 	{
 		$view = new Polls_View();
-		$this->recipients_list->items = Polls_Model::get_recipients_data_decorated($post->ID, 0);
+		$sort_column = $this->get_sort_column();
+		$sort_direction = $this->get_sort_direction();
+		$recipients_data = Polls_Model::get_recipients_data_decorated($post->ID, 0, 1);
+		Polls_Model::sort_recipients_data($recipients_data, $sort_column, $sort_direction);
+		$this->recipients_list->items = $recipients_data;
 		$this->recipients_list->prepare_items();
 		$view->render_recipients_metabox($this->recipients_list, $post->ID);
+	}
+
+	/**
+	 * Returns the column to be sorted as requested by the client.
+	 * @since	1.0.1
+	 * @return	string
+	 */
+	private function get_sort_column()
+	{
+		if(isset($_REQUEST['orderby']))
+		{
+			return sanitize_key($_REQUEST['orderby']);
+		}
+		else
+		{
+			return '';
+		}
+	}
+
+	/**
+	 * Returns the sort direction as requested by the client.
+	 * @since	1.0.1
+	 * @return	string
+	 */
+	private function get_sort_direction()
+	{
+		if(isset($_REQUEST['order']) && $_REQUEST['order'] == 'desc')
+		{
+			return -1;
+		}
+		return 1;
 	}
 
 	/**

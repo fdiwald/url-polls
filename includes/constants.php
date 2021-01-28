@@ -1,9 +1,14 @@
 <?php
 namespace Url_Polls;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 const PLUGIN_NAME = 'url-polls';
 const LANG_DOMAIN = PLUGIN_NAME;
-const VERSION = '1.0.0';
+const VERSION = '1.0.1';
 
 const POST_TYPE_POLL = 'url-polls_poll';
 

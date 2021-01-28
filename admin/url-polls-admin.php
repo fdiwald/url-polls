@@ -1,14 +1,4 @@
 <?php
-namespace Url_Polls\Admin;
-use Url_Polls\Admin\Polls\Polls_Controller;
-use const Url_Polls\LANG_DOMAIN;
-use const Url_Polls\MENU_SETTINGS;
-use const Url_Polls\PLUGIN_NAME;
-use const Url_Polls\POST_TYPE_POLL;
-use const Url_Polls\SETTING_DEFAULT_RECIPIENTS;
-use const Url_Polls\SETTINGS_SECTION_GENERAL;
-use const Url_Polls\VERSION;
-
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -18,6 +8,22 @@ use const Url_Polls\VERSION;
  * @package    Url_Polls
  * @subpackage Url_Polls/admin
  */
+
+namespace Url_Polls\Admin;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
+use Url_Polls\Admin\Polls\Polls_Controller;
+use const Url_Polls\LANG_DOMAIN;
+use const Url_Polls\MENU_SETTINGS;
+use const Url_Polls\PLUGIN_NAME;
+use const Url_Polls\POST_TYPE_POLL;
+use const Url_Polls\SETTING_DEFAULT_RECIPIENTS;
+use const Url_Polls\SETTINGS_SECTION_GENERAL;
+use const Url_Polls\VERSION;
 
 /**
  * The admin-specific functionality of the plugin.

@@ -15,7 +15,12 @@
  * Plugin Name:       URL Polls
  * Plugin URI:        https://github.com/fdiwald/url-polls
  * Description:       Send out polls and receive feedback via URLs
- * Version:           1.0.0
+ * 
+ * ************************************
+ * Version:           1.0.1
+ * Also set Version in /includes/constants.php!
+ * ************************************
+ * 
  * Author:            Florian Diwald
  * Author URI:        https://github.com/fdiwald
  * License:           GPL-2.0+
@@ -28,13 +33,6 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
-
-/**
- * Current plugin version.
- * Start at version 1.0.0 and use SemVer - https://semver.org
- * Rename this for your plugin and update it as you release new versions.
- */
-define( 'URL_POLLS_VERSION', '1.0.0' );
 
 /**
  * The code that runs during plugin activation.

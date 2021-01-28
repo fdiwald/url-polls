@@ -1,6 +1,10 @@
 <?php
-//,,,,,, https://www.sitepoint.com/using-wp_list_table-to-create-wordpress-admin-tables/
 namespace Url_Polls\Admin\Polls;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 use WP_List_Table;
 
@@ -9,6 +13,10 @@ use const Url_Polls\ACTION_BULK_DELETE;
 use const Url_Polls\ACTION_BULK_REJECT;
 use const Url_Polls\ACTION_DELETE_RECIPIENT;
 use const Url_Polls\LANG_DOMAIN;
+
+if ( ! class_exists( 'WP_List_Table' ) ) {
+	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
+}
 
 /**
  * The class for rendering a list of recipients for a poll
@@ -107,7 +115,7 @@ class Recipients_List extends WP_List_Table
 	public function get_sortable_columns() {
 		$sortable_columns = array(
 			'recipient_name' => array( 'recipient_name', true ),
-			'recipient_answer' => array( 'recipient_answer', true )
+			'answer_description' => array( 'answer_description', true )
 		);
 	
 		return $sortable_columns;

@@ -1,6 +1,13 @@
 <?php
 namespace Url_Polls;
 
+use Collator;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 use const Url_Polls\LANG_DOMAIN;
 use const Url_Polls\SETTING_DEFAULT_RECIPIENTS;
 
@@ -13,7 +20,7 @@ class Polls_Model
 	 * Delivers an array with all recipients for the given post_ID.
 	 * @since	1.0.0
 	 */
-	public static function get_recipients_data($post_ID, $per_page = 5, $page_number = 1)
+	public static function get_recipients_data(int $post_ID, int $items_per_page = 5, int $page_number = 1)
 	{
 		$data = get_post_meta($post_ID, META_RECIPIENTS);
 		if($data != null)
@@ -33,9 +40,9 @@ class Polls_Model
 	 * Delivers an array with all recipients for the given post_ID including descriptions for the answers.
 	 * @since	1.0.0
 	 */
-	public static function get_recipients_data_decorated($post_ID, $per_page = 5, $page_number = 1)
+	public static function get_recipients_data_decorated(int $post_ID, int $items_per_page = 5, int $page_number = 1)
 	{
-		$recipients_data = self::get_recipients_data($post_ID, $per_page, $page_number);
+		$recipients_data = self::get_recipients_data($post_ID, $items_per_page, $page_number);
 		if($recipients_data != null)
 		{
 			$recipients_data = self::decorate_recipients_data($recipients_data);
@@ -113,6 +120,25 @@ class Polls_Model
 			}
 		);
 		return $recipients_data;
+	}
+
+	/**
+	 * Sorts the recipients by the given column in the given direction.
+	 * The sorting is done on the given array. No array copy will be returned.
+	 * @since	1.0.1
+	 */
+	public static function sort_recipients_data(array &$recipients_data, string $sort_column, int $sort_direction)
+	{
+		if($sort_column != '' && $recipients_data != null)
+		{
+			usort(
+				$recipients_data,
+				function($left_recipient, $right_recipient) use ($sort_column, $sort_direction)
+				{
+					return strnatcmp($left_recipient[$sort_column], $right_recipient[$sort_column]) * $sort_direction;
+				}
+			);
+		}
 	}
 
 	/**
