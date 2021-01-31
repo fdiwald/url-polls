@@ -9,9 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - German translation of the front end
 
 ### Fixed
-- Proper handling of bulk actions in recipients list
-- Correct display of unicode characters in recipients list
-- Avoid error message in excel when opening exported recipients list
+- Upper bulk-action drop down in recipients list has no effect
+- Incorrect display of unicode characters in recipients list
+- Error message in excel when opening exported recipients list
+- Recipients list showing up in other post types
 
 ## [1.0.1] - 2020-01-28
 ### Added
